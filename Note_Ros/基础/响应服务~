@@ -1,0 +1,9 @@
+在功能包的src文件夹中新建ABC.cpp文件
+
+打开CMakeLists.txt文件，添加如下代码
+//xxx_client是节点名，rosrun package/xxx_client
+add_executable(xxx_client src/ABC.cpp)   
+target_link_libraries(xxx_client ${catkin_LIBRARIES})
+add_dependencies(xxx_client package_name_gencpp)
+
+把CMakLists.txt拉入QT
