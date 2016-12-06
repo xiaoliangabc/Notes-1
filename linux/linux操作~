@@ -1,0 +1,4 @@
+crtl+shift+t 在一个窗口中打开新的终端
+
+cat etc/issue
+查看版本信息
