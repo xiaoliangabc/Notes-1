@@ -1,0 +1,5 @@
+ftp\\
+smb
+
+ssh linaro@192.168.1.241
+if config
