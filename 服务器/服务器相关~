@@ -1,5 +1,7 @@
 ftp\\
 smb
 
+远程登陆指令，用户名@ip地址
 ssh linaro@192.168.1.241
-if config
+
+ifconfig -a //linux下查看IP地址
