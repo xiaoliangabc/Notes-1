@@ -1,5 +1,6 @@
 rosrun package_name node_executable_name:=node_name
 rosrun package_name node_executable_name __name:=node_name//自定义节点名
+rosrun package_name node_executable_name original-topic-name:=new-name//这个就厉害了，把发布的话题修改一个名字。重映射也可以在launch中。
 
 rostopic list//显示话题
 rostopic echo topic_name//显示话题中的内容

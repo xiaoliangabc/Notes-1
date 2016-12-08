@@ -1,0 +1,8 @@
+开机按F12
+进入set up（bios）
+在boot里把secure boot关掉
+退出并保存
+重启
+F12
+选U盘的那个选项，回车
+install ubuntu
