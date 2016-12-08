@@ -1,0 +1,43 @@
+
+pcDuino3B更新为ubuntu14.04系统并安装ros-indigo（armhf）过程说明
+
+pcDuino3B默认安装12.04的linaro ubuntu系统，为了安装ros-indigo，需要将系统更新为14.04版本。
+
+一、更新系统至14.04 linaro ubuntu（使用SD卡刷入系统）
+从pcDuino官网http://www.linksprite.com/image-for-pcduino3-nano-pcduino3b/ 下载Ubuntu 14 的镜像文件
+pcduino3_livesuit_ubuntu14_GbpsMAC_20141231.tar.gz,解压得到镜像pcduino3_nano_a20_kernel_livesuit_20141231.img文件。然后在
+下载界面下载量产工具Phonenix Card ，解压后可直接使用。使用Phonenix Card 工具将pcduino3_nano_a20_kernel_livesuit_20141231.img
+镜像写入一张已经格式化过的SD卡中。PS:若想将写入镜像的SD卡恢复，可使用SDFormatter软件恢复；建议使用迅雷会员从pcDuino官网下载
+ubuntu镜像，这样下载速度比较快。
+先将pcDuino3B断电，插入已经写入镜像的SD卡，然后上电，此时有一个LED灯TX将低频闪烁，如果通过HDMI外接显示器，显示器将是黑屏状
+态，标志着正在更新系统。等待大概10分钟左右，TX灯不再闪烁表示系统更新完成，重新上电即进入新的系统。到此linaro ubuntu 14.04完成
+刷入。
+
+二、安装ROS-Indigo
+在安装ROS之前需要对pcDuino内存进行扩容，由于板载内存4G，安装ROS之后可能出现空间不足的问题，所以使用一张较大容量的SD卡并入pcDuino
+的存储空间。我准备了一张格式化之后的8G SD卡。
+1.SD卡扩容
+ubuntu系统是安装在板载flash nand上的，首先使用sudo board-config.sh 打开开发板配置工具，在最后一项有一个clone系统至SD卡的选项，
+使用该选项将系统clone至SD卡，该过程大概需要7到8分钟， clone完成后按esc退出配置模式，将提示自动重启系统，重启系统后就将进入SD上的clone
+系统。然后进入系统后再次使用sudo board-config.sh 打开开发板配置工具，发现在选项中出现了“expand_rootfs”选项，这在未clone系统至SD卡之
+前是没有的，使用此选项一路确认完成pcDuino的SD卡扩容。
+SD卡的扩容参考网站：http://my.phirobot.com/blog/2013-07-setup_pcduino_for_ros.html （该网页内容仅供参考）
+http://www.th7.cn/system/lin/201502/83625.shtml （该网页内容有些偏差，使用最后一项clone选项，而不是倒数第二项
+的备份选项）
+2.安装ROS-Indigo
+在完成SD卡扩容后，开始安装ROS-Indigo，根据官网ubuntu armhf版本的ros-indigo安装教程进行：
+http://wiki.ros.org/indigo/Installation/UbuntuARM 只要严格按照ros官网的教程安装ros-indigo，就可以顺利完成ROS安装。其中要注意的几点是
+：（1）最好更改一下源列表，使用清华或者中科大的源，这样安装比较快；
+（2）在教程“2.9 Verifying OS name” 使用cat /etc/lsb-release 得到的信息是
+DISTRIB_ID=Linaro
+DISTRIB_RELEASE=14.04
+DISTRIB_CODENAME=trusty
+DISTRIB_DESCRIPTION=”Linaro 14.04″
+需要使用文本编辑工具将该文件更改为：
+DISTRIB_ID=Ubuntu
+DISTRIB_RELEASE=14.04
+DISTRIB_CODENAME=trusty
+DISTRIB_DESCRIPTION=”Ubuntu 14.04″
+最后可以使用roscore 或者sudo apt-get install ros-indigo-ros-tutorials安装turtlesim测试ros-indigo是否工作正常。
+至此完成pcDuino3B的ubuntu 14.04系统的更新和ros-indigo的安装。
+
