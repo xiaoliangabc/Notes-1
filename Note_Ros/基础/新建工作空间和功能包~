@@ -1,0 +1,9 @@
+新建工作空间
+mkdir -p ~/workspace-name/src
+cd ~/workspace-name/src 
+catkin_init_workspace
+cd ~/workspace-name/
+catkin_make
+
+新建包(后面跟着的是依赖)
+catkin_create_pkg listen rospy roscpp std_msgs geometry_msgs

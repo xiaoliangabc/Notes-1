@@ -1,0 +1,14 @@
+rosrun package_name node_executable_name:=node_name
+rosrun package_name node_executable_name __name:=node_name//自定义节点名
+
+rostopic list//显示话题
+rostopic echo topic_name//显示话题中的内容
+rostopic hz topic_name//显示话题的发布频率
+rostopic bw topic_name//显示话题的带宽
+rostopic info topic_name//获取话题的各种信息,类型和发布和订阅者
+rostopic pub -r rate-in-hz topic-name message-type message-content
+//手动发布消息，例如：rostopic pub -r 1 turtle1/cmd_vel geometry_msgs/Twist '[2,0,0]' '[0,0,0]'
+
+rosmsg show message_type_name//查看消息类型
+
+roswtf//全面的检测，包括环境变量、安装的文件以及运行的节点

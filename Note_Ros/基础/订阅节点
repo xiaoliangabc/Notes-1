@@ -1,8 +1,5 @@
 注意：如果不知道topic的名字，可以用rostopic list查看
 
-新建包(后面跟着的是依赖)
-catkin_create_pkg listen rospy roscpp std_msgs geometry_msgs
-
 新建cpp文件
 gedit xx.cpp
 
@@ -33,7 +30,7 @@ int main (int argc, char  ** argv){
 
     ros::Subscriber sub = nh.subscribe ( "turtle1/cmd_vel", 1000, &callback);//和上面一致
 
-    ros::spin();
+    ros::spin();//关于ros::spin和ros::spinOnce的区别，看浅谈70页
 }
 
 

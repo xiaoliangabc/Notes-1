@@ -36,7 +36,7 @@ int main(int argc, char ** argv){
         else msg.linear.x = 2.0;
         ROS_INFO_STREAM(std::setprecision(2) << std::fixed<< "velocity  = " << msg.linear.x );
         my_pub.publish(msg);//发布消息到话题
-        loop_rate.sleep();//这边的loop_rate要和上面的一致。
+        loop_rate.sleep();
         cnt = cnt * 3+ 1;
     }
     return 0;

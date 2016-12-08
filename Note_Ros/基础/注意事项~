@@ -7,16 +7,11 @@ rosnode kill node_name
 ctrl+c 可以终止节点，但还会保留在rosnode list中
 加上rosnode cleanup
 
-rostopic list//显示话题
-rostopic echo topic_name//显示话题中的内容
-rostopic hz topic_name//显示话题的发布频率
-rostopic bw topic_name//显示话题的带宽
-rostopic info topic_name//获取话题的各种信息,类型和发布和订阅
-
-
 ##################源码编写相关
 #include "ros/ros.h"
 这种ros和ros.h中间的/后面不能有空格
+
+catkin make错误，提示无法找到ros/ros.h头文件，或者ros::init等ROS函数未定义的错误，最大的可能性是CmakeLists.txt没有正确申明对roscpp的依赖
 
 
 ##################msg相关
@@ -25,6 +20,8 @@ msg生成的头文件存在catkin_ws的devel中的include中
 
 
 ###############service相关
-srv文件也类似于一个结构体，可以调用msg创建的消息（结构体）类型，在节点中引用的时候res后面紧跟srv中的内容，再向下细分结构体
+srv文件也类似于一个结构体，可以调用msg创建的消息（结构体）类型，在节点中引用的时候ros后面紧跟srv中的内容，再向下细分结构体
 
 srv的源代码文件名字 rosrun的节点名字 rqt_graph中的名字 srv文件的名字尽量一致
+
+
