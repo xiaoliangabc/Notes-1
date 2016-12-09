@@ -16,7 +16,7 @@
         ouput = "screen"
         respawn = "true"
         required = "true"
-        launch-prefix = "xterm-e"
+        launch-prefix = "xterm -e"
         ns = "namespace"
     >
 
@@ -29,7 +29,7 @@
         <param name = "param-name" value = "param-value"/>
     </group>
     
-<launch>
+</launch>
 
 //name:这边的node-name会覆盖所有的ros::init定义的名字
 //如果要使用一个匿名名称，可以用name="$(anon base_name)"
@@ -37,7 +37,7 @@
 //output:节点会把标准输出打印在显示器上，而不是log文件
 //respawn:节点停止后自动重启
 //required:必要节点，终止的时候其他节点会被杀掉。
-//launch-prefix="xterm-e"为该节点单独开一个终端
+//launch-prefix="xterm -e"为该节点单独开一个终端
 //启动前缀属性不止xterm还有其他，比如降低进程优先级
 //ns:命名空间，在不同命名空间内可以启动相同的节点，比如两只乌龟，两个遥控节点。
 //remap:话题的重映射中使用的一般是相对名称，在应用所有重映射之前，所有名称都要先解析为全局名称。浅谈上反转乌龟速度的（在launch一文中的）好例子
