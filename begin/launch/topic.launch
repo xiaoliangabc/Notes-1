@@ -1,0 +1,14 @@
+<launch>
+    <node
+        pkg = "begin"
+        type = "listen"
+        name = "listening"
+	output = "screen"
+    />        
+    <node
+        pkg = "begin"
+        type = "give_out"
+        name = "giving_out"
+	launch-prefix = "xterm -e"
+    />
+</launch>
