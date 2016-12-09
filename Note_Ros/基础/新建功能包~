@@ -1,5 +1,0 @@
- catkin_init_workspace
-
-新建包(后面跟着的是依赖)
-catkin_create_pkg listen rospy roscpp std_msgs geometry_msgs
-
