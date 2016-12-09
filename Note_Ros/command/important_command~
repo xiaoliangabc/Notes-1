@@ -13,3 +13,9 @@ rostopic pub -r rate-in-hz topic-name message-type message-content
 rosmsg show message_type_name//查看消息类型
 
 roswtf//全面的检测，包括环境变量、安装的文件以及运行的节点
+
+rosparam list：查看有哪些参数
+rosparam get parameter-name:获取参数值
+rosparam set parameter-name parameter-value:设定参数的值
+rosservice call /clear//设定完参数值之后需要调用一下
+

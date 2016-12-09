@@ -21,7 +21,6 @@
     >
 
     <remap from = "origin" to "new"/>
-    <param name = "param-name" value = "param-value"/>
 
     </node> 
 
