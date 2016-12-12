@@ -1,0 +1,4 @@
+QT
+bash -i -c
+bashrc里面要source工作空间
+最后还要在项目（project）里面的构建环境中添加cpath变量，值是CMAKE_PREFIX_PATH中所有devel后面加个include
