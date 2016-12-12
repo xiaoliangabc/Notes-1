@@ -1,4 +1,19 @@
 crtl+shift+t 在一个窗口中打开新的终端
 
+
+
+
+########################ROS###########################
 cat etc/issue
-查看版本信息
+查看ros版本信息
+
+alias ssh_pcduino='ssh linaro@192.168.1.241'
+这里的alias相当于宏定义，在终端里运行的时候，敲ssh_pcduino就等于执行等于号后面引号里面的内容。
+
+dmesg | grep usb*
+查看USB口的使用
+
+sudo chmod +777 /dev/ttyUSB0
+给USB口附权限
+
+

@@ -9,3 +9,12 @@ cat etc/issue
 
 alias ssh_pcduino='ssh linaro@192.168.1.241'
 这里的alias相当于宏定义，在终端里运行的时候，敲ssh_pcduino就等于执行等于号后面引号里面的内容。
+
+dmesg | grep usb*
+查看USB口的使用
+
+sudo chmod +777 /dev/ttyUSB0
+给USB口附权限
+
+. xxx.sh
+运行sh文件
