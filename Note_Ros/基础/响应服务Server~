@@ -27,7 +27,6 @@ int main(int argc, char **argv){
     //service 是服务的名字
     ROS_INFO_STREAM("ready to judge!");
     ros::spin();//ros::spinOnce()的用法参考浅谈P70、155
-    //如果除了服务调用之外还有其他任务要做，用spinOnce
 
     return 0;
 }

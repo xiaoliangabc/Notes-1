@@ -19,3 +19,9 @@ rosparam get parameter-name:获取参数值
 rosparam set parameter-name parameter-value:设定参数的值
 rosservice call /clear//设定完参数值之后需要调用一下
 
+rosservice list:列处所有运行的服务
+rosnode info node-name：查看特定节点提供的服务
+rosservice node service-name:查找提供服务的节点
+rossrv show service-data-type-name:查看服务数据类型
+rosservice call service-name request-content:调用服务
+

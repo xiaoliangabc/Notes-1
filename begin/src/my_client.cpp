@@ -9,6 +9,7 @@ int main(int argc, char **argv){
     ros::ServiceClient client = n.serviceClient<begin::my_srv>("service");
     begin::my_srv srv;
     srv.request.req = atoll(argv[1]);
+    //srv.request.req  =  1;
     if(client.call(srv))
     {
         ROS_INFO_STREAM(srv.response.velocity.linear.x);
