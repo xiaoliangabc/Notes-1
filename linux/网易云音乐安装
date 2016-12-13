@@ -1,0 +1,5 @@
+下载deb文件
+sudo dpgk -i xxx.deb
+sudo apt-get install -f
+
+再来一遍：sudo dpgk -i xxx.deb

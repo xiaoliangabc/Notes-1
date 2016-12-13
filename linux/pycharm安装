@@ -1,0 +1,58 @@
+参考网页：http://blog.csdn.net/qq_33880788/article/details/51479564
+
+1、安装Java  jdk
+
+直接打开终端，执行下面的命令;
+
+sudo add-apt-repository ppa:webupd8team/java
+
+sudo apt-get update
+
+sudo apt-get install oracle-java8-installer
+
+安装过程中会出现oracle license对话框，选择是
+
+安装完成后，运行java -version 或者javac -version 查看是否安装成功。得到类似以下输出，表示安装成功
+
+2、安装pycharm
+
+(1)到官网下载安装包
+
+(2)到下载目录下进行解压
+
+$ cd 下载/
+
+$ tar xfz pycharm-*.tar.gz
+
+(3)运行解压后的文件夹中的bin目录下的pycharm.sh文件
+
+$ cd pycharm-community-3.4.1/bin/
+注意可能不是这里的pycharm-community-3.4.1
+
+$ ./pycharm.sh或者sh pycharm.sh
+
+安装过程中询问是否导入settings，选择不导入->OK.然后全部是默认，根据提示选择
+
+3、设置快捷启动方式
+
+在Ubuntu下，每次都要找到 pycharm.sh所在的文件夹，执行./pycharm.sh，非常麻烦。最好能创建一个快捷方式。
+
+Ubuntu的快捷方式都放在/usr/share/applications，首先在该目录下创建一个Pycharm.desktop
+
+$ sudo gedit /usr/share/applications/Pycharm.desktop
+
+然后输入以下内容，注意Exec和Icon需要找到正确的路径
+
+[Desktop Entry]
+Type=Application
+Name=Pycharm
+GenericName=Pycharm3
+Comment=Pycharm3:The Python IDE
+Exec="/XXX/pycharm-community-3.4.1/bin/pycharm.sh" %f
+Icon=/XXX/pycharm-community-3.4.1/bin/pycharm.png
+Terminal=pycharm
+Categories=Pycharm;
+
+然后再到/usr/share/applications中找到相应的启动，复制到桌面即可。 
+
+
