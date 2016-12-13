@@ -1,3 +1,6 @@
+###################编译相关
+ROS Kinetic版本一定要在CmakeLists.txt里面加include_directories(${catkin_INCLUDE_DIRS})，否则报错ros/ros.h找不到。
+
 ##################节点相关
 rosrun package_name node_executable_name:=node_name
 这种方法可以覆盖节点的默认名，很重要！！！！
