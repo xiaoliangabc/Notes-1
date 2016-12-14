@@ -1,6 +1,5 @@
 下载deb文件
 sudo dpkg -i xxx.deb
-
 如果提示依赖不足
 sudo apt-get install -f
 
