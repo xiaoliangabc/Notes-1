@@ -3,6 +3,3 @@ usart.c串口的重映射
 stm32f10x.h line70 解除define的注释
 board.mk 注意hd.s 不然nciv.c里面很多都编译不过。
 
-flash.mk
-target/stm32f1x.cfg 
-target/stm32f4x.cfg这个要根据芯片改
