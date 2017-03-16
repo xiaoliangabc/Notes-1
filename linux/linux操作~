@@ -16,4 +16,8 @@ dmesg | grep usb*
 sudo chmod +777 /dev/ttyUSB0
 给USB口附权限
 
+. xxx.sh
+运行sh文件
 
+grep -r xxx ./
+在当前路径下寻找相关目标
