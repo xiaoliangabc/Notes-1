@@ -1,2 +1,5 @@
 log文件，有时候会影响节点的运行，要去/.ros文件夹里删掉。
 .h头文件的参数改动，编译的时候要先clean再make，直接make它不会把.h重新链接。
+
+###################编译相关
+ROS Kinetic版本一定要在CmakeLists.txt里面加include_directories(${catkin_INCLUDE_DIRS})，否则报错ros/ros.h找不到。
