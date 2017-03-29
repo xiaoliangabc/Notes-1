@@ -1,5 +1,5 @@
 新建包(后面跟着的是依赖)当然，也可以在已有的包里写，一个包含有多个节点
-catkin_create_pkg listen rospy roscpp std_msgs geometry_msgs
+catkin_create_pkg listen rospy roscpp std_msgs geometry_msgs sensor_msgs turtlesim
 
 新建cpp文件
 gedit xx.cpp
@@ -7,7 +7,7 @@ gedit xx.cpp
 修改Cmakelists文件 
 find_package(catkin REQUIRED COMPONENTS)里面的依赖
 添加可执行文件声明
-add_executable(ABC src/xxx.cpp)  //rosrun package_name ABC，文件路径要对
+add_executable(ABC src/xxx.cpp)  #rosrun package_name ABC，文件路径要对
 target_link_libraries(ABC ${catkin_LIBRARIES})
 
 修改packgae.xml文件
