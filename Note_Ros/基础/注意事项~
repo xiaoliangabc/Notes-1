@@ -28,4 +28,4 @@ srv文件也类似于一个结构体，可以调用msg创建的消息（结构�
 
 srv的源代码文件名字 rosrun的节点名字 rqt_graph中的名字 srv文件的名字尽量一致
 
-rospack profile
+

@@ -3,6 +3,7 @@ rosrun package_name node_executable_name __name:=node_name//自定义节点名
 rosrun package_name node_executable_name original-topic-name:=new-name//这个就厉害了，把发布的话题修改一个名字。重映射也可以在launch中。
 
 rostopic list//显示话题
+rosnode cleanup:删去已经不在运行的节点的topic，配合上一条指令使用
 rostopic echo topic_name//显示话题中的内容
 rostopic hz topic_name//显示话题的发布频率
 rostopic bw topic_name//显示话题的带宽
@@ -24,4 +25,5 @@ rosnode info node-name：查看特定节点提供的服务
 rosservice node service-name:查找提供服务的节点
 rossrv show service-data-type-name:查看服务数据类型
 rosservice call service-name request-content:调用服务
+
 
