@@ -10,11 +10,6 @@ find_package(catkin REQUIRED COMPONENTS)里面的依赖
 add_executable(ABC src/xxx.cpp)  #rosrun package_name ABC，文件路径要对
 target_link_libraries(ABC ${catkin_LIBRARIES})
 
-include_directories(
-  include
-  ${catkin_INCLUDE_DIRS}
-)
-
 修改packgae.xml文件
 <build_depend>xxx</build_depend>
 <run_depend>xxx</run_depend>
