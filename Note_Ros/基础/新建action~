@@ -12,6 +12,7 @@ float32 percent_complete
 find_package(catkin REQUIRED genmsg actionlib_msgs actionlib)
 add_action_files(DIRECTORY action FILES xxx.action)
 generate_messages(DEPENDENCIES actionlib_msgs)
+catkin_package(CATKIN_DEPENDS actionlib_msgs)
 
 在package.xml文件中添加如下：
 <build_depend>actionlib</build_depend>
