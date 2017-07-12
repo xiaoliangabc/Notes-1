@@ -1,3 +1,5 @@
+chores是action所在的包
+
 C++:
 #include <chores/DoDishesAction.h>
 #include <actionlib/server/simple_action_server.h>
