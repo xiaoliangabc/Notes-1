@@ -1,4 +1,4 @@
-chores是一个包
+chores是action所在的包
 
 C++:
 #include <chores/DoDishesAction.h>

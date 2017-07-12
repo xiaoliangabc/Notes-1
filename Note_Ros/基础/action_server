@@ -47,3 +47,7 @@ if __name__ == '__main__':
   rospy.init_node('do_dishes_server')
   server = DoDishesServer()
   rospy.spin()
+
+别忘了：
+chmod +x xxx.py
+make the note excutable.
