@@ -1,0 +1,2 @@
+xrand：查看显示器信息
+xrandr --output eDP-1 --auto --left-of HDMI-0：将eDP-1移动到HDMI-0左边，实现双屏
