@@ -1,5 +1,0 @@
-#export ROS_MASTER_URI=http://192.168.1.241:11311
-#export ROS_IP=192.168.1.137
-
-远程登陆指令，用户名@ip地址
-ssh linaro@192.168.1.241

@@ -1,5 +1,0 @@
-gcc编译器路径，写在bashrc里面（全局变量）
-usart.c串口的重映射
-stm32f10x.h line70 解除define的注释
-board.mk 注意hd.s 不然nciv.c里面很多都编译不过。
-
