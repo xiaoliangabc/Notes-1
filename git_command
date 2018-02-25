@@ -32,3 +32,20 @@ git pull origin
 7.push到自己的远程仓库
 git push luyifan_origin master
 8.发出pull request
+
+合作开发：
+查看所有远程仓库
+git remote -v
+关联马文科的源仓库
+git remote add mawenke https://…… 
+首先fetch一份原仓库变动到本地，这会生成一个分支 mawenke/master
+git fetch mawenke
+可以查看所有分支
+git branch
+切换到本地master分支
+git checkout master
+合并 mawenke/master和master分支
+git merge mawenke/master
+----到这里就把源仓库更新到了本地仓库
+最后更新副本仓库
+git push origin master
