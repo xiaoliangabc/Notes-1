@@ -57,8 +57,48 @@
 - klt_homography_init_添加第一个关键帧:
   - 检测特征
     - 提取第一帧中的特征点,记录特征点的像素坐标(2d)px_ref_,归一化平面的坐标(3d)f_ref_
-  - 如果特征点<100,失败，重新输入第一帧
+    - 如果特征点<100,失败，重新输入第一帧
   - 初始化KltHomographyInit.frame_ref
   - 在KltHomographyInit.px_cur_.begin()前插入px_ref_
   - 返回成功
+- 设置了5个关键特征点key_pts_，分布图片的5个角落，用来检测两帧是否有重叠
+- 将关键帧插入地图
+- stage_ = STAGE_SECOND_FRAME,用于状态机跳转
+### processSecondFrame(处理第二帧)
 - klt_homography_init_添加第二个关键帧:
+  - trackKlt对第一帧和第二帧进行光流追踪
+    - calcOpticalFlowPyrLK(frame_ref, frame_cur, px_ref, px_cur, status, error)//此时的px_cur_和px_ref_是一样的
+        - frame_ref:第一帧
+        - frame_cur:第二帧
+        - px_ref:第一帧的特征点的像素坐标
+        - px_cur:第二帧的特征点的像素坐标
+        - status:匹配情况,vector类型,status[0]=1就代表第一对px_ref和px_cur的匹配正常；否则不正常
+        - error:每对匹配的误差
+    - 根据status删除不正常的匹配点
+    - 计算disparities:每对匹配点的像素误差
+  - 如果匹配到的特征点对的个数<设定值,返回FAILURE
+  - 如果disparities平均值<设定值,返回NO_KEYFRAME
+  - computeHomography(f_ref, f_cur, focal_length, reprojection_threshold, inliers, xyz_in_cur, T_cur_from_ref)
+    - f_ref:参考帧特征点的归一化坐标
+    - f_cur:当前帧特征点的归一化坐标
+    - focal_length:相机的焦距fx
+    - reprojection_threshold:人为设定的值
+    - inliers:有效数据,计算H阵后，利用H阵将图1上的特征点投影到图2,然后用投影结果和图2真实的特征点位置计算残差，若第n对匹配点的残差小于某值，则inlier.push_back(n).所以inlier记录了哪些点对是有效匹配的
+    - xyz_in_cur:第一帧特征点的空间位置
+    - T_cur_from_ref:SE3类型的数据,前两帧之间的位姿变换矩阵
+    - 构造Homography类,计算H矩阵,分解H矩阵(这个过程有点复杂),最终求得位姿变换矩阵T_c2_from_c1,包含R和T信息
+    - computeInliers(f_cur, f_cur, R, T, reprojection_threshold, focal_length, xyz_in_cur, inliers, outliers)
+      - outliers: 无效数据,与inliers相对
+    - T_cur_from_ref = Homography.T_c2_from_c1
+  - 如果inlier.size <设定值，返回失败
+  - 计算xyz_in_cur.z的平均值scene_depth_median,就是第一幅图特征点的平均空间深度
+  - scale = 1/scene_depth_median:这里的1代表机器人初始化被平移1米
+  - Rescale the map such that the mean scene depth is equal to the specified scale
+    - frame_cur->T_f_w_ = T_cur_from_ref_ * frame_ref_->T_f_w_;
+    - frame_cur->T_f_w_.translation() = -frame_cur->T_f_w_.rotation_matrix()*(当前帧世界坐标 + scale*(当前帧世界坐标 - 前一帧世界坐标));
+  - 上一步操作没太懂，反正是根据平均深度更新了frame_cur->T_f_w_.translation()这个变量
+  - 根据inliers,将每一对有效匹配的点对,计算出其世界坐标(每一对点只有一个世界坐标)
+  - 根据世界坐标,构建Feature类型的特征点
+  - 将这些特征点都add到frame_cur和frame_ref中
+  - 返回成功
+### processFrame(处理第后续帧)
