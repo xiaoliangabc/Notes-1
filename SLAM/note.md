@@ -50,6 +50,28 @@
   - Point* point;         //!< Pointer to 3D point which corresponds to the feature.
   - Vector2d grad;        //!< Dominant gradient direction for edglets, normalized.
 
+### Map : boost::noncopyable
+- list< FramePtr > keyframes_;          //!< List of keyframes in the map.
+- list< Point* > trash_points_;         //!< A deleted point is moved to the trash bin. Now and then this is cleaned. One reason is that the visualizer must remove the points also.
+- MapPointCandidates point_candidates_;
+
+### Reprojector
+- Options
+  - size_t max_n_kfs(10);         //!< max number of keyframes to reproject from
+  - bool find_match_direct(true);
+- size_t n_matches_;
+- size_t n_trials_;
+- Candidate:记录了一个特征点的世界坐标和像素坐标
+  - Point* pt;                    //!< 3D point.
+  - Vector2d px;                  //!< projected 2D pixel location.
+- Grid grid_                      
+  - CandidateGrid cells;          //cells=vector<cell>,每个cell类似于Grid下面的一个小房间,每个小房间里面有一个list<Candidate>.
+  - vector<int> cell_order;
+  - int cell_size;
+  - int grid_n_cols;
+  - int grid_n_rows;
+- Matcher matcher_;
+- Map& map_;
 ------
 ## 流程
 ### processFirstFrame(处理第一帧)
@@ -61,8 +83,8 @@
   - 初始化KltHomographyInit.frame_ref
   - 在KltHomographyInit.px_cur_.begin()前插入px_ref_
   - 返回成功
-- 设置了5个关键特征点key_pts_，分布图片的5个角落，用来检测两帧是否有重叠
-- 将关键帧插入地图
+- 设置该帧为关键帧,从该帧的特征点中提取了5个关键特征点key_pts_，分布图片的5个角落，用来检测两帧是否有重叠
+- 将该关键帧插入地图
 - stage_ = STAGE_SECOND_FRAME,用于状态机跳转
 ### processSecondFrame(处理第二帧)
 - klt_homography_init_添加第二个关键帧:
@@ -101,4 +123,58 @@
   - 根据世界坐标,构建Feature类型的特征点
   - 将这些特征点都add到frame_cur和frame_ref中
   - 返回成功
+- 设置该帧为关键帧,从该帧的特征点中提取了5个关键特征点key_pts_，分布图片的5个角落，用来检测两帧是否有重叠
+- 获取该帧的平均和最小深度
+- 深度滤波器插入关键帧
+- 将该关键帧插入地图
+- stage_ = STAGE_DEFAULT_FRAME,用于状态机跳转
+- klt_homography_init_.reset
 ### processFrame(处理第后续帧)
+- 初始化当前帧的位姿:new_frame_->T_f_w_ = last_frame_->T_f_w_;
+- 构建SparseImgAlign类,用于利用重投影的方法优化位姿
+  - SE3 T_cur_from_ref(cur_frame_->T_f_w_ * ref_frame_->T_f_w_.inverse());
+  - 优化T_cur_from_ref
+  - cur_frame_->T_f_w_ = T_cur_from_ref * ref_frame_->T_f_w_
+  - 返回跟踪到的特征点数
+- 地图重投影
+  - 遍历map里保存的关键帧，如果某个关键帧中的5个key_pts_在当前帧视野范围内,就把该关键帧add进close_kfs容器
+  - close_kfs是pair类型,close_kfs.first是对应的关键帧,close_kfs.second是关键帧与当前帧的位姿差异=(frame->T_f_w_的变换矩阵-kf->T_f_w_的变换矩阵).norm
+  - 根据close_kfs.second对close_kfs中的关键帧进行排序
+  - 将最靠近当前帧的N帧存入overlap_kfs_容器中,overlap_kfs_.first是关键帧,overlap_kfs_.second记录了该关键帧帧有多少特征点在当前帧的视野中
+  - 调用Reprojector::reprojectPoint将特征点根据其像素坐标的位置存入grid_.cells;每个cell里面有一个list<Candidate>,每个list记录了一个特征点的世界坐标和像素坐标.
+    - 我的理解:对于每个cell,虽然里面有一条list的候选特征点,但只选其中一个来匹配,这样可以避免匹配的特征点都集中在画面的某个区域,使得匹配的点对均匀分布在整个画面
+  - 对map_.point_candidates_也执行reprojectPoint操作,如果某一个point_candidates在10帧里都没有出现在视野内,就剔除它
+  - 遍历所有的grid.cells,在每个cell中选一个特征点进行匹配
+    - 对cell中的候选点,根据点的质量指标进行排序
+    - 这边没看懂
+  - 记录下匹配成功的特征点的个数
+  - 如果匹配到的点的个数不够多
+    - new_frame_->T_f_w_ = last_frame_->T_f_w_; //reset to avoid crazy pose jumps
+    - tracking_quality_ = TRACKING_INSUFFICIENT;
+    - 返回失败
+- 位姿优化
+  - 遍历当前帧的特征点fts_,计算投影误差e=project2d(特征点归一化平面3d坐标)-project2d(frame->T_f_w_ * 特征点世界坐标)
+  - 根据特征点的金字塔层级去缩放e，层级越高，e越小。比如level=2，e=e*1/100
+  - errors.push_back(e.norm());
+  - estimates scale by computing the median absolute deviation(上面的errors)
+  - 开始优化,优化次数人为设定
+    - 遍历当前帧的特征点fts_,计算总残差
+    - 利用ldlt求解方程Ax=b;A,b已知,x未知
+      - A: J.transpose * J
+      - b: J.transpose * e
+      - Ax=b其实就是:J * dT = e;注意这里的J是误差相对于位姿的雅各布矩阵,所以算出来的dT其实就是一个最优微小扰动,使得e变为0
+      - 之所以要在前面乘J.transpose是为了让A变成方阵,这样可以SVD分解
+    - 从第二轮优化开始,如果新的误差比上一次优化后的误差大,就让frame->T_f_w_ = T_old;很简单,优化了反而误差大了,不如不优化
+    - 更新:
+      - T_new = SE3::exp(dT)*frame->T_f_w_; 
+      - T_old = frame->T_f_w_; 
+      - frame->T_f_w_ = T_new;
+      - 不能直接frame->T_f_w_ = SE3::exp(dT)*frame->T_f_w_;因为这是矩阵运算,这么搞会出错的
+    - 如果误差<设定值,直接退出优化
+  - 更新frame->Cov_
+  - 把当前帧重投影误差比较大的几个特征点fts_删掉
+  - 如果优化完之后剩下的fts_个数<20,返回失败
+- 结构优化,优化路标点的位姿
+
+
+  
