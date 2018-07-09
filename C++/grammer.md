@@ -36,7 +36,20 @@ Bar(int )函数声明末尾带有const，表示不允许Bar(int)函数对类Foo�
     for_each(intVector.begin(),intVector.end(),boost::bind(add,_1,100));
     
 ## 容器
-list:类似于双向vecter,头尾都可以操作,插入删除很快,随机访问很慢
+### 以下是一些选择容器的基本原则：
+- #### 除法你有很好的理由选择其他容器，否则应该使用vector；
+- #### 如果你的程序有很多小的元素，且空间的额外开销很重要，则不要使用list或forward_list；
+- #### 如果程序要求随机访问元素，应使用vector或deque；
+- #### 如果程序要求在容器的中间插入或删除元素，应使用list或forward_list；
+
+### 容器介绍
+- list:
+  - 头尾都可以操作
+  - 插入删除很快,随机访问很慢
+- deque:
+  - 双端队列，可以高效的在头尾两端插入和删除元素,
+  - 双端队列不保证内部的元素是按连续的存储空间存储的，因此，不允许对指针直接做偏移操作来直接访问元素
+### 容器操作
 erase():删除该成员的同时返回指向下一个成员的指针;
     
     vector<int> A;
@@ -99,4 +112,15 @@ erase():删除该成员的同时返回指向下一个成员的指针;
     A.sort(boost::bind(&f1, _1, _2))//降序排列
     A.sort(f1)//和上面有区别吗？
     A.sort(boost::bind(&f2, _1, _2))//升序排列
+------
+### nth_element函数
+    vector<int> pts;
+    //只保证pts[6]是排名第6的元素,同时pts[0-5]<pts[6],pts[6-end]>pts[6]
+    nth_element(pts.begin(), pts.begin()+6; pts.end())
     
+    compare(Ponit2d* a, Ponit2d* b)
+    {
+        return(a->x < b->x);
+    }
+    vector<point2d> pts;
+    nth_element(pts.begin(), pts.begin()+6; pts.end(), compare);

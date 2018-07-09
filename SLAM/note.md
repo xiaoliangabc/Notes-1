@@ -132,9 +132,9 @@
 ### processFrame(处理第后续帧)
 - 初始化当前帧的位姿:new_frame_->T_f_w_ = last_frame_->T_f_w_;
 - 构建SparseImgAlign类,用于利用重投影的方法优化位姿
-  - SE3 T_cur_from_ref(cur_frame_->T_f_w_ * ref_frame_->T_f_w_.inverse());
+  - SE3 T_cur_from_ref(new_frame_->T_f_w_ * last_frame_->T_f_w_.inverse());
   - 优化T_cur_from_ref
-  - cur_frame_->T_f_w_ = T_cur_from_ref * ref_frame_->T_f_w_
+  - new_frame_->T_f_w_ = T_cur_from_ref * last_frame_->T_f_w_
   - 返回跟踪到的特征点数
 - 地图重投影
   - 遍历map里保存的关键帧，如果某个关键帧中的5个key_pts_在当前帧视野范围内,就把该关键帧add进close_kfs容器
@@ -175,6 +175,21 @@
   - 把当前帧重投影误差比较大的几个特征点fts_删掉
   - 如果优化完之后剩下的fts_个数<20,返回失败
 - 结构优化,优化路标点的位姿
-
-
-  
+- 筛选keyframe
+  - 将当前帧插入core_kfs_容器
+  - setTrackingQuality,根据pose优化后剩下的特征点的个数设置tracking_quality_的值
+  - 如果tracking_quality_ == TRACKING_INSUFFICIENT,new_frame_->T_f_w_ = last_frame_->T_f_w_;返回失败
+  - 将该帧设置为关键帧，并用该帧的特征更新5个关键特征点
+  - map_.point_candidates_.addCandidatePointToFrame(new_frame_);
+- 初始化新的深度滤波器
+- add keyframe to map
+### relocalizeFrame(重新定位)
+- 传入的参数是单位阵R和零向量T构成的李代数,和最靠近last_frame的一帧作为ref_frame_
+- 构建SparseImgAlign类,用于利用重投影的方法优化位姿
+  - SE3 T_cur_from_ref(new_frame_->T_f_w_ * ref_frame_->T_f_w_.inverse());
+  - 优化T_cur_from_ref
+  - new_frame_->T_f_w_ = T_cur_from_ref * ref_frame_->T_f_w_
+  - 返回跟踪到的特征点数
+  - 如果跟踪到的点数>30
+    - 记录下上一帧的位姿:SE3 T_f_w_last = last_frame_->T_f_w_;
+    - 调用processFrame()处理新帧,如果返回的不是失败,Relocalization成功,否则new_frame_->T_f_w_ = T_f_w_last
