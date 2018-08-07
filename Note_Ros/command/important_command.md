@@ -1,0 +1,37 @@
+### 执行节点
+- rosrun package_name node_executable_name:=node_name
+- rosrun package_name node_executable_name __name:=node_name//自定义节点名
+- rosrun package_name node_executable_name original-topic-name:=new-name//这个就厉害了，把发布的话题修改一个名字。重映射也可以在launch中。
+------
+### topic操作
+- rostopic list//显示话题
+- rosnode cleanup:删去已经不在运行的节点的topic，配合上一条指令使用
+- rostopic echo topic_name//显示话题中的内容
+- rostopic hz topic_name//显示话题的发布频率
+- rostopic bw topic_name//显示话题的带宽
+- rostopic info topic_name//获取话题的各种信息,类型和发布和订阅者
+- rostopic pub -r rate-in-hz topic-name message-type message-content
+-  //手动发布消息，例如：rostopic pub -r 1 turtle1/cmd_vel geometry_msgs/Twist '[2,0,0]' '[0,0,0]'
+------
+### msg操作
+- rosmsg list
+- rosmsg show message_type_name//查看消息类型
+------
+### debug操作
+- roswtf//全面的检测，包括环境变量、安装的文件以及运行的节点
+------
+### param操作
+- rosparam list：查看有哪些参数
+- rosparam get parameter-name:获取参数值
+- rosparam set parameter-name parameter-value:设定参数的值
+------
+### 服务操作
+- rosservice call /clear//设定完参数值之后需要调用一下
+- rosservice list:列处所有运行的服务
+- rosservice node service-name:查找提供服务的节点
+- rossrv show service-data-type-name:查看服务数据类型
+- rosservice call service-name request-content:调用服务
+------
+### 节点操作
+- rosnode info node-name：查看特定节点提供的服务
+

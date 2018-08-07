@@ -1,29 +1,33 @@
-###################编译相关
-ROS Kinetic版本一定要在CmakeLists.txt里面加include_directories(${catkin_INCLUDE_DIRS})，否则报错ros/ros.h找不到。
+##编译相关
+- ROS Kinetic版本一定要在CmakeLists.txt里面加include_directories(${catkin_INCLUDE_DIRS})，否则报错ros/ros.h找不到。
+- log文件，有时候会影响节点的运行，要去/.ros文件夹里删掉。
+------
 
-##################节点相关
+##节点相关
 rosrun package_name node_executable_name:=node_name
 这种方法可以覆盖节点的默认名，很重要！！！！
+------
 
 rosnode kill node_name
 终止节点运行
 ctrl+c 可以终止节点，但还会保留在rosnode list中
 加上rosnode cleanup
 
-##################源码编写相关
+##源码编写相关
 #include "ros/ros.h"
 这种ros和ros.h中间的/后面不能有空格
 
 catkin make错误，提示无法找到ros/ros.h头文件，或者ros::init等ROS函数未定义的错误，最大的可能性是CmakeLists.txt没有正确申明对roscpp的依赖
 
 ros::Rate loop_rate(1);这边的loop_rate要和后面的loop_rate.sleep();一致
+------
 
-##################msg相关
+##msg相关
 msg生成的头文件存在catkin_ws的devel中的include中
 调用msg格式：#include <package_name/msg类型.h>
+------
 
-
-###############service相关
+##service相关
 srv文件也类似于一个结构体，可以调用msg创建的消息（结构体）类型，在节点中引用的时候ros后面紧跟srv中的内容，再向下细分结构体
 
 srv的源代码文件名字 rosrun的节点名字 rqt_graph中的名字 srv文件的名字尽量一致
