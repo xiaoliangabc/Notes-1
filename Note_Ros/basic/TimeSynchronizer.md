@@ -50,7 +50,7 @@
 	MySyn::MySyn(){
 		odom_sub_ = new message_filters::Subscriber<nav_msgs::Odometry>(ar_handle, "/odom", 1);
 		img_sub_  = new message_filters::Subscriber<sensor_msgs::Image>(ar_handle, "/usb_cam/image_raw", 1);
-		sync_ = new message_filters::Synchronizer<MySyncPolicy>(slamSyncPolicy(10), *odom_sub_, *img_sub_);
+		sync_ = new message_filters::Synchronizer<MySyncPolicy>(slamSyncPolicy(10), *odom_sub_, *img_sub_);//这里的10就是误差容忍数
 		sync_->registerCallback(boost::bind(&MySyn::combineCallback,this, _1, _2));
 
 		ros::spin();
