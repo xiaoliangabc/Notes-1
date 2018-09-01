@@ -112,3 +112,4 @@
 - callBack_1 callBack_2 callBack_3触发频率都是1hz
 - callBack_1中的sleep(3)阻塞了callBack_3，但是callBack_2正常触发
 - 因为queue_1和queue_2是两个线程
+- 如果把ros::AsyncSpinner spinner_1(1, &queue_1);中的1换成2，代表使用两个线程处理callBack_1和callBack_3，则不会发生阻塞
