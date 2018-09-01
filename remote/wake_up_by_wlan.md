@@ -1,0 +1,10 @@
+### 安装:(树莓派)
+> sudo apt-get install powerwake
+
+### 配置:(台式机)
+> 在被启动电脑的bios里面设置, wakeup from lan enable, 不同计算机设置不一样,注意字眼.然后找个电源管理,节能disable掉.
+
+### 使用:(树莓派)
+> powerwake 192.168.xxx.xxx
+
+### 方案, 搞一个树莓派内网穿透一下,然后用树莓派发送该指令,ip地址就是台式机的IP地址,所以台式机的局域网ip要固定下来.

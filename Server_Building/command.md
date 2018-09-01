@@ -1,0 +1,3 @@
+- ftp\\
+- smb
+- ifconfig -a //linux下查看IP地址
