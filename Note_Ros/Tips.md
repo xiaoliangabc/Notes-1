@@ -4,22 +4,27 @@
 ------
 
 ##节点相关
-rosrun package_name node_executable_name:=node_name
-这种方法可以覆盖节点的默认名，很重要！！！！
+- 这种方法可以覆盖节点的默认名，很重要！！！！
+	rosrun package_name node_executable_name:=node_name
+- 终止节点运行
+	rosnode kill node_name
+- ctrl+c 可以终止节点，但还会保留在rosnode list中
+- 加上rosnode cleanup
 ------
 
-rosnode kill node_name
-终止节点运行
-ctrl+c 可以终止节点，但还会保留在rosnode list中
-加上rosnode cleanup
-
 ##源码编写相关
-#include "ros/ros.h"
-这种ros和ros.h中间的/后面不能有空格
-
-catkin make错误，提示无法找到ros/ros.h头文件，或者ros::init等ROS函数未定义的错误，最大的可能性是CmakeLists.txt没有正确申明对roscpp的依赖
-
-ros::Rate loop_rate(1);这边的loop_rate要和后面的loop_rate.sleep();一致
+- catkin make错误，提示无法找到ros/ros.h头文件，或者ros::init等ROS函数未定义的错误，最大的可能性是CmakeLists.txt没有正确申明对roscpp的依赖
+- ros::Rate loop_rate(1);这边的loop_rate要和后面的loop_rate.sleep();一致
+- ros::spinOnce()配合循环使用的时候,循环里一定要干别的事，错误例子:
+	while(!Break){
+        	ros::spinOnce();
+    	}
+- 正确如下:
+	while(!Break){
+		if(bInit)
+		    	break;
+		ros::spinOnce();
+    	}
 ------
 
 ##msg相关
