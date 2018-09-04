@@ -1,0 +1,18 @@
+### 编写ipv_4.json:
+	{
+		"server":"45.76.197.197",
+		"server_port":8888,
+		"local_address":"127.0.0.1",
+		"local_port":1080,
+		"password":"handsfreeteam",
+		"timeout":300,
+		"method":"aes-256-cfb"
+	}
+
+### 编写start_ipv4.sh:
+	#!/bin/sh
+	sslocal -c /home/luyifan/VPN/ipv_4.json start
+
+
+### 参考:
+> http://blog.csdn.net/m0_38128647/article/details/77800724
