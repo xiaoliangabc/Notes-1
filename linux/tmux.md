@@ -1,4 +1,23 @@
-## 基本命令
+## tmux工作方式
+- ### tmux最上级的组织是session,操作如下:
+	tmux new-session -d -s S -n W1 #构建一个叫S的会话且默认窗口名为W1,S:0或者S:W1都可以访问到该窗口,-d代表在后台运行,不加就会直接在终端显示
+	tmux detach #退出当前会话,依然在后台运行
+	tmux ls #列出所有会话i
+	tmux kill-session -t S #杀掉一个叫S的会话
+- ### 第二层组织是windows,构建方式如下:
+	tmux new-window -t S:1 -n W2 #在S会话下,新建一个窗口S:1,重命名为W2,访问的时候S:1和S:W2都可以访问到该窗口
+	tmux select-window -t S:0 #选中第一个窗口
+	tmux select-window -t S:W1 #效果同上
+- ### 第三层组织是plane,操作方式如下:
+	tmux selectp -t 0 #选中当前窗口下的第0个plane
+	tmux splitw -h -p 50 #从当前plane(编号0)向右按照50:50的比例分裂出新的planei(编号1)
+	tmux selectp -t 0 #选中当前窗口下的第0个plane
+	tmux splitw -v -p 50 #从当前plane向下按照50:50的比例分裂出新的plane(编号1,原先的编号1-->2)
+	
+	tmux selectp -t 1 #选中第一个plane
+	tmux send-keys -t "roscore" C-m #在当前选中的plane运行roscore命令
+> 
+## 基本命令(如果个性化配置后,crtl+b要根据自己的配置修改)
 - Ctrl+b " — 水平分割标签
 - Ctrl+b % — 竖直分割标签
 - Ctrl+b 方向键 — 选择标签
@@ -35,47 +54,14 @@
 	set-window-option -g window-status-current-bg yellowsetw -g monitor-activity on
 ------
 
-## 脚本编写
-	selectp -t 0 # 选择第一个标签
-	splitw -h -p 50 # 分割成两半
+## 脚本编写demo:
+	tmux new-session -d -s S -n W1
+	tmux new-window -t S:1 -n W2
+	tmux select-window -t S:W1
+	tmux selectp -t 0
+	tmux splitw -h -p 50 
+	tmux selectp -t 0
+	tmux splitw -v -p 50
 
-	selectp -t 1 # 选择第二个标签
-	splitw -v -p 50 #  分割成两半
-	selectp -t 0 # 返回第一个标签
-- 值得一提的是这种脚本文件可以做的不仅是打开标签，你也可以在里面预置运行命令，例如：
-	splitw -h -p 50 'vim' #分割现在的标签，并同时在新标签里面运行vim
-------
-
-## 面板最大化(V1.8之后的版本自带该功能)
-- 首先编写一个zoom脚本
-	mkdir .tmux
-	touch zoom
-	vim zoom
-- 粘贴如下内容
-	#!/bin/bash -f
-	currentwindow=`tmux list-window | tr '\t' ' ' | sed -n -e '/(active)/s/^[^:]*: *\([^ ]*\) .*/\1/gp'`;
-	currentpane=`tmux list-panes | sed -n -e '/(active)/s/^\([^:]*\):.*/\1/gp'`;
-	panecount=`tmux list-panes | wc | sed -e 's/^ *//g' -e 's/ .*$//g'`;
-	inzoom=`echo $currentwindow | sed -n -e '/^zoom/p'`;
-	if [ $panecount -ne 1 ]; then
-	    inzoom="";
-	fi
-	if [ $inzoom ]; then
-	    lastpane=`echo $currentwindow | rev | cut -f 1 -d '@' | rev`;
-	    lastwindow=`echo $currentwindow | cut -f 2- -d '@' | rev | cut -f 2- -d '@' | rev`;
-	    tmux select-window -t $lastwindow;
-	    tmux select-pane -t $lastpane;
-	    tmux swap-pane -s $currentwindow;
-	    tmux kill-window -t $currentwindow;
-	else
-	    newwindowname=zoom@$currentwindow@$currentpane;
-	    tmux new-window -d -n $newwindowname;
-	    tmux swap-pane -s $newwindowname;
-	    tmux select-window -t $newwindowname;
-	fi
-- 绑定一个快捷指令
-	unbind z
-	bind z run ". ~/.tmux/zoom"
-
-
-
+	tmux selectp -t 0
+	tmux send-keys "roscore" C-m
