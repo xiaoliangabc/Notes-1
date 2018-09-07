@@ -8,15 +8,16 @@
 	tmux new-window -t S:1 -n W2 #在S会话下,新建一个窗口S:1,重命名为W2,访问的时候S:1和S:W2都可以访问到该窗口
 	tmux select-window -t S:0 #选中第一个窗口
 	tmux select-window -t S:W1 #效果同上
-- ### 第三层组织是plane,操作方式如下:
-	tmux selectp -t 0 #选中当前窗口下的第0个plane
-	tmux splitw -h -p 50 #从当前plane(编号0)向右按照50:50的比例分裂出新的planei(编号1)
-	tmux selectp -t 0 #选中当前窗口下的第0个plane
-	tmux splitw -v -p 50 #从当前plane向下按照50:50的比例分裂出新的plane(编号1,原先的编号1-->2)
-	
-	tmux selectp -t 1 #选中第一个plane
-	tmux send-keys -t "roscore" C-m #在当前选中的plane运行roscore命令
-> 
+	tmux kill-window -t S:W2 #杀掉S会话的W2窗口
+- ### 第三层组织是pane,操作方式如下:
+	tmux selectp -t 0 #选中当前窗口下的第0个pane
+	tmux splitw -h -p 50 #从当前pane(编号0)向右按照50:50的比例分裂出新的pane(编号1)
+	tmux selectp -t 0 #选中当前窗口下的第0个pane
+	tmux splitw -v -p 50 #从当前plane向下按照50:50的比例分裂出新的pane(编号1,原先的编号1-->2)
+	tmux selectp -t 0 #选中第0个pane
+	tmux send-keys -t "roscore" C-m #在当前选中的pane运行roscore命令
+	tmux kill-pane -t 2 #杀掉第2个pane
+
 ## 基本命令(如果个性化配置后,crtl+b要根据自己的配置修改)
 - Ctrl+b " — 水平分割标签
 - Ctrl+b % — 竖直分割标签
