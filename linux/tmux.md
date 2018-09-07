@@ -28,8 +28,7 @@
 - Ctrl+b p — 转到之前的 (p)revious 窗口
 -----
 
-## tmux 自启动
-> vim .bashrc
+## tmux 自启动(修改.bashrc)
 	if [ $TERM != "screen-256color" ] && [  $TERM != "screen" ]; then
 	    tmux attach || tmux new; exit
 	fi 
