@@ -26,6 +26,7 @@
 - Ctrl+b c — 创建 (c)reate 一个新窗口
 - Ctrl+b n — 转到下一个 (n)ext 窗口
 - Ctrl+b p — 转到之前的 (p)revious 窗口
+- ctrl+b & — 杀掉当前窗口
 -----
 
 ## tmux 自启动(修改.bashrc)
