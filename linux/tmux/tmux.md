@@ -37,9 +37,9 @@
 ## 改造tmux
 	cd ~
 	vim .tmux.conf
-### 1.更改前缀(ctrl+b -> ctrl+a)
+### 1.更改前缀(ctrl+b -> ctrl+x)
 	unbind C-b
-	set -g prefix C-a
+	set -g prefix C-x
 ### 2.Alt+方向键选择标签
 	bind -n M-Left select-pane -L
 	bind -n M-Right select-pane -R
@@ -52,7 +52,8 @@
 	set -g visual-activity on
 
 ### 4.用指定的颜色高亮显示当前窗口
-	set-window-option -g window-status-current-bg yellowsetw -g monitor-activity on
+	set-window-option -g window-status-current-bg yellow
+        setw -g monitor-activity on
 ------
 
 ## 脚本编写demo:
