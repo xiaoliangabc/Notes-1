@@ -37,9 +37,9 @@
 ## 改造tmux
 	cd ~
 	vim .tmux.conf
-### 1.更改前缀(ctrl+b -> ctrl+x)
+### 1.更改前缀(ctrl+b -> ctrl+a)
 	unbind C-b
-	set -g prefix C-x
+	set -g prefix C-a
 ### 2.Alt+方向键选择标签
 	bind -n M-Left select-pane -L
 	bind -n M-Right select-pane -R
