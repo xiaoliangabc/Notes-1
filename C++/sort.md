@@ -6,6 +6,7 @@
     bool f2 (Struct a,Struct b) { return (a.x<b.x); }
     sort(A.begin(), A.end(), f1);//降序排列
     sort(A.begin(), A.end(), f2);//升序排列
+    sort(A.begin(), A.end(), \[\](const struct& A, const struct& B){return A.a < B.b;})
 #### list排序
     list<Struct> A
     bool f1 (Struct a,Struct b) { return (a.x>b.x); }
